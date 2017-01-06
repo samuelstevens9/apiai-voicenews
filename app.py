@@ -79,8 +79,8 @@ def makeDefaultResponse(other_resp=None,headline):
         "speech": other_resp,
         "displayText": other_resp,
         # "data": data,
-        "contextOut": [{"name":"reading_headlines", "lifespan":5, "parameters":{"headline":headline}}]
-        "source": "apiai-bibles_org"
+        "contextOut": [{"name":"reading_headlines", "lifespan":5, "parameters":{"headline":headline}}],
+        "source": "apiai-voicenews"
     }
 
 if __name__ == '__main__':
