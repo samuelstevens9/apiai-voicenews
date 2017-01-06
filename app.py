@@ -70,7 +70,7 @@ def cleanPassage(passage_raw):
     passage_txt = Markup(passage_html).striptags()
     return passage_txt
 
-def makeDefaultResponse(other_resp=None,headline):
+def makeDefaultResponse(other_resp=None,headline=None):
     if(not other_resp):
         other_resp = "I didn't understand."
     
