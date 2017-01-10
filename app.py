@@ -8,9 +8,10 @@ from flask import make_response
 from flask import Markup
 from rss import NewsRSS
 from crawler import extractCPArticleText
+from ai_sessions import AISessions
 # Flask app should start in global layout
 app = Flask(__name__)
-
+ais = None
 @app.route("/",methods=['GET'])
 def main():
     
@@ -19,10 +20,12 @@ def main():
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    
     req = request.get_json(silent=True, force=True)
 
     print("Request:")
     print(json.dumps(req, indent=4))
+    ais = AISessions(req.get("sessionId"))
     
     
     
@@ -32,11 +35,15 @@ def webhook():
     # print(res)
     r = make_response(res)
     r.headers['Content-Type'] = 'application/json'
+    
+    ais.save()
     return r
 
 
 def processRequest(req):
     try:
+        
+        
         nrss = NewsRSS("http://rssfeeds.courierpress.com/courierpress/business&x=1")
         ai_action = req.get("result").get("action")
         if(ai_action == "read.headline_article"):
@@ -49,7 +56,10 @@ def processRequest(req):
             return makeDefaultResponse(articleText,headine)
         if(ai_action == "read.section_headlines"):
             headlines = nrss.getHeadlines()
-            return makeDefaultResponse(headlines[0],headlines[0])
+            last_headline = ais.sessionData.get('last_headline_index',-1)
+            last_headline += 1
+            ais.sessionData['last_headline_index'] = last_headline
+            return makeDefaultResponse(headlines[last_headline],headlines[last_headline])
         #print nrss.findByHeadline("Crossroads IGA on North Green River opens Jan. 5")
         
         
