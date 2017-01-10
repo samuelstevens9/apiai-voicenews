@@ -7,7 +7,7 @@ from flask import request
 from flask import make_response
 from flask import Markup
 from rss import NewsRSS
-
+from crawler import extractCPArticleText
 # Flask app should start in global layout
 app = Flask(__name__)
 
@@ -44,8 +44,9 @@ def processRequest(req):
             itm = nrss.findByHeadline(headine)
             #summary_detail.value
             #summary
-            cleanSummary = cleanPassage(itm['summary'])
-            return makeDefaultResponse(cleanSummary,headine)
+            articleText = extractCPArticleText(itm['link'])
+            #cleanSummary = cleanPassage(itm['summary'])
+            return makeDefaultResponse(articleText,headine)
         if(ai_action == "read.section_headlines"):
             headlines = nrss.getHeadlines()
             return makeDefaultResponse(headlines[0],headlines[0])
