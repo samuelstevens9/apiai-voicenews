@@ -11,7 +11,7 @@ from crawler import extractCPArticleText
 from ai_sessions import AISessions
 # Flask app should start in global layout
 app = Flask(__name__)
-ais = None
+#ais = None
 @app.route("/",methods=['GET'])
 def main():
     
@@ -25,7 +25,7 @@ def webhook():
 
     print("Request:")
     print(json.dumps(req, indent=4))
-    ais = AISessions(req.get("sessionId"))
+    #ais = AISessions(req.get("sessionId"))
     
     
     
@@ -36,7 +36,7 @@ def webhook():
     r = make_response(res)
     r.headers['Content-Type'] = 'application/json'
     
-    ais.save()
+    #ais.save()
     return r
 
 
@@ -56,9 +56,9 @@ def processRequest(req):
             return makeDefaultResponse(articleText,headine)
         if(ai_action == "read.section_headlines"):
             headlines = nrss.getHeadlines()
-            last_headline = ais.sessionData.get('last_headline_index',-1)
-            last_headline += 1
-            ais.sessionData['last_headline_index'] = last_headline
+            #last_headline = ais.sessionData.get('last_headline_index',-1)
+            last_headline = 1
+            #ais.sessionData['last_headline_index'] = last_headline
             return makeDefaultResponse(headlines[last_headline],headlines[last_headline])
         #print nrss.findByHeadline("Crossroads IGA on North Green River opens Jan. 5")
         
