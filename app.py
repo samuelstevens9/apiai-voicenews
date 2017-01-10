@@ -84,8 +84,11 @@ def cleanPassage(passage_raw):
 def makeDefaultResponse(other_resp=None,headline=None):
     if(not other_resp):
         other_resp = "I didn't understand."
-    
-    print (other_resp.encode("utf-8"))
+    try:
+        print (other_resp.encode("utf-8"))
+    except:
+        print (other_resp)
+        
     return {
         "speech": other_resp,
         "displayText": other_resp,
