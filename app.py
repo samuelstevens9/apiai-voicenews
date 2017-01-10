@@ -48,7 +48,7 @@ def processRequest(req):
             #cleanSummary = cleanPassage(itm['summary'])
             return makeDefaultResponse(articleText,headine)
         if(ai_action == "read.section_headlines"):
-            headlines = nrss.getHeadlines()
+            headlines = nrss.getHeadlines() 
             return makeDefaultResponse(headlines[0],headlines[0])
         #print nrss.findByHeadline("Crossroads IGA on North Green River opens Jan. 5")
         
