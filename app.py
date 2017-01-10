@@ -8,7 +8,7 @@ from flask import make_response
 from flask import Markup
 from rss import NewsRSS
 from crawler import extractCPArticleText
-from ai_sessions import AISessions
+#from ai_sessions import AISessions
 # Flask app should start in global layout
 app = Flask(__name__)
 #ais = None
