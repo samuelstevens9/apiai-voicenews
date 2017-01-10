@@ -38,11 +38,21 @@ def webhook():
 def processRequest(req):
     try:
         nrss = NewsRSS("http://rssfeeds.courierpress.com/courierpress/business&x=1")
-        headlines = nrss.getHeadlines()
+        ai_action = req.get("result").get("action")
+        if(ai_action == "read.headline_article"):
+            headine = req.get("result").get("parameters").get("headline")
+            itm = nrss.findByHeadline(headine)
+            #summary_detail.value
+            #summary
+            cleanSummary = cleanPassage(itm['summary'])
+            return makeDefaultResponse(cleanSummary,headine)
+        if(ai_action == "read.section_headlines"):
+            headlines = nrss.getHeadlines()
+            return makeDefaultResponse(headlines[0],headlines[0])
         #print nrss.findByHeadline("Crossroads IGA on North Green River opens Jan. 5")
         
         
-        return makeDefaultResponse(headlines[0],headlines[0])
+        return makeDefaultResponse()
     except Exception as e:
         import traceback
         traceback.print_exc()
@@ -60,12 +70,12 @@ def cleanPassage(passage_raw):
     passage_html = passage_raw.encode('ascii', 'ignore').decode('ascii')
     #remove the heading
     #print passage_html
-    heading_regex = r'<h3.*?>.*?</h3>'
-    passage_html = re.sub(heading_regex,"",passage_html,1)
+    #heading_regex = r'<h3.*?>.*?</h3>'
+    #passage_html = re.sub(heading_regex,"",passage_html,1)
     #print passage_html
     #remove first vers number 
-    verse_num_regex = r'<sup.*?>\d+</sup>'
-    passage_html = re.sub(verse_num_regex,"",passage_html,1)
+    #verse_num_regex = r'<sup.*?>\d+</sup>'
+    #passage_html = re.sub(verse_num_regex,"",passage_html,1)
     #print passage_html
     passage_txt = Markup(passage_html).striptags()
     return passage_txt
